@@ -1,0 +1,382 @@
+{
+    "info": {
+        "_postman_id": "techhub-fintech-api",
+        "name": "TechHub Fintech API",
+        "description": "Wallet & Payment API - Complete API collection for testing",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Auth",
+            "item": [
+                {
+                    "name": "Signup",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"fullName\": \"Test User\",\n  \"email\": \"testuser@example.com\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/signup",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "signup"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Login",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "if (pm.response.code === 200) {",
+                                    "  const responseJson = pm.response.json();",
+                                    "  pm.environment.set('access_token', responseJson.accessToken);",
+                                    "  console.log('Token saved:', responseJson.accessToken);",
+                                    "}"
+                                ]
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"email\": \"alice@example.com\",\n  \"password\": \"password123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/auth/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "auth",
+                                "login"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Wallets",
+            "item": [
+                {
+                    "name": "Create Wallet",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/wallets",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "wallets"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Wallet Balance",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/wallets",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "wallets"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Fund Wallet",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"amount\": 5000,\n  \"description\": \"Initial funding\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/wallets/fund",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "wallets",
+                                "fund"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Withdraw from Wallet",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"amount\": 1000,\n  \"description\": \"Withdrawal for expenses\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/wallets/withdraw",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "wallets",
+                                "withdraw"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Delete Wallet",
+                    "request": {
+                        "method": "DELETE",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/wallets",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "wallets"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transfers",
+            "item": [
+                {
+                    "name": "Transfer Funds",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n  \"receiverWalletId\": \"<receiver_wallet_id>\",\n  \"amount\": 500,\n  \"description\": \"Payment for services\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/transfers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transfers"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User Transfers",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transfers",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transfers"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Transactions",
+            "item": [
+                {
+                    "name": "Get Wallet Transactions",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transactions/wallet/<wallet_id>",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions",
+                                "wallet",
+                                "<wallet_id>"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Transaction by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/transactions/<transaction_id>",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "transactions",
+                                "<transaction_id>"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Users",
+            "item": [
+                {
+                    "name": "Get All Users",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/users",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get User by ID",
+                    "request": {
+                        "method": "GET",
+                        "header": [
+                            {
+                                "key": "Authorization",
+                                "value": "Bearer {{access_token}}"
+                            }
+                        ],
+                        "url": {
+                            "raw": "{{base_url}}/users/<user_id>",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "users",
+                                "<user_id>"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:3000",
+            "type": "string"
+        },
+        {
+            "key": "access_token",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}
