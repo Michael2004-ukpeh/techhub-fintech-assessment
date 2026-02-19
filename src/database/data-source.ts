@@ -18,8 +18,14 @@ export const config: DataSourceOptions = {
     process.env.NODE_ENV === 'production'
       ? { rejectUnauthorized: false }
       : false,
-  entities: ['dist/**/*.entity{.ts,.js}'],
-  migrations: ['dist/migrations/*{.ts,.js}'],
+  entities:
+    process.env.NODE_ENV === 'production'
+      ? ['dist/**/*.entity{.js,.ts}']
+      : ['src/**/*.entity{.ts,.js}', 'dist/**/*.entity{.js,.ts}'],
+  migrations:
+    process.env.NODE_ENV === 'production'
+      ? ['dist/migrations/*{.js,.ts}']
+      : ['src/migrations/*{.ts,.js}', 'dist/migrations/*{.js,.ts}'],
   synchronize: false,
   poolSize: 5,
   extra: {

@@ -1,99 +1,112 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# TechHub Fintech — Wallet & Payment API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This repository implements a Wallet & Payment API built with NestJS and TypeORM. The following notes explain how to set up the project, run migrations, seed data, and run tests locally.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Prerequisites**
 
-## Description
+- Node.js >= 16
+- npm
+- PostgreSQL (for development/production). Tests may be configured to run against a test DB or in-memory DB.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+**Environment**
+Create a `.env` file in the project root with values appropriate for your environment. Example:
 
-## Project setup
+```env
+# Database (development)
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=techhub_dev
+DB_USERNAME=postgres
+DB_PASSWORD=postgres
 
-```bash
-$ npm install
+# JWT
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=3600s
+
+# Node
+NODE_ENV=development
+PORT=3000
 ```
 
-## Compile and run the project
+**Install dependencies**
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+**Build (required before TypeORM CLI using compiled data-source)**
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+npm run build
 ```
 
-## Deployment
+**Migrations**
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Generate a migration (example — adjust data-source path if different):
 
 ```bash
-$ npm install -g mau
-$ mau deploy
+# build first
+npm run build
+
+# generate migration (example)
+npx typeorm -d dist/database/data-source.js migration:generate -n InitialMigration
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Run migrations:
 
-## Resources
+```bash
+npx typeorm -d dist/database/data-source.js migration:run
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+**Seeding**
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+If a seed script exists, run:
 
-## Support
+```bash
+npm run seed
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+**Run (development)**
 
-## Stay in touch
+```bash
+npm run dev
+# or
+npm run start:dev
+```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+**Run (production-like)**
 
-## License
+```bash
+npm run build
+npm run start:prod
+```
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+**Tests**
+
+- Unit tests: `npm run test`
+- E2E tests: `npm run test:e2e`
+
+Notes for test runs
+
+- Jest / ts-jest may run the app in TypeScript context and require path-mapping to resolve `src/*` imports. If you get module-not-found for `src/...`, ensure `test/jest-e2e.json` (or your Jest config) includes `moduleNameMapper` mapping, e.g.:
+
+```json
+{ "^src/(.*)$": "<rootDir>/src/$1" }
+```
+
+- Database for tests: if e2e tests fail with "Driver not connected" or "No metadata for \"User\" was found", either configure a test database via `.env` (run migrations before tests) or run tests against an in-memory DB by setting `NODE_ENV=test` and adjusting `src/database/data-source.ts` to use SQLite for tests (synchronize: true).
+
+- Some e2e tests perform DB operations and may need increased Jest timeouts. You can call `jest.setTimeout(20000)` in test setup or increase per-test timeouts.
+
+**Key files to inspect**
+
+- [src/database/data-source.ts](src/database/data-source.ts)
+- [test/jest-e2e.json](test/jest-e2e.json)
+- [package.json](package.json)
+
+If you'd like, I can:
+
+- Run the e2e tests and report current failures, or
+- Add a test-only in-memory DB config and re-run tests.
+
+Choose which follow-up you want next.
