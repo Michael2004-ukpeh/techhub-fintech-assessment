@@ -49,13 +49,13 @@ Generate a migration (example — adjust data-source path if different):
 npm run build
 
 # generate migration (example)
-npx typeorm -d dist/database/data-source.js migration:generate -n InitialMigration
+npm run migration:generate  -- migrations/InitialMigration
 ```
 
 Run migrations:
 
 ```bash
-npx typeorm -d dist/database/data-source.js migration:run
+npm run migration:run
 ```
 
 **Seeding**
@@ -80,33 +80,3 @@ npm run start:dev
 npm run build
 npm run start:prod
 ```
-
-**Tests**
-
-- Unit tests: `npm run test`
-- E2E tests: `npm run test:e2e`
-
-Notes for test runs
-
-- Jest / ts-jest may run the app in TypeScript context and require path-mapping to resolve `src/*` imports. If you get module-not-found for `src/...`, ensure `test/jest-e2e.json` (or your Jest config) includes `moduleNameMapper` mapping, e.g.:
-
-```json
-{ "^src/(.*)$": "<rootDir>/src/$1" }
-```
-
-- Database for tests: if e2e tests fail with "Driver not connected" or "No metadata for \"User\" was found", either configure a test database via `.env` (run migrations before tests) or run tests against an in-memory DB by setting `NODE_ENV=test` and adjusting `src/database/data-source.ts` to use SQLite for tests (synchronize: true).
-
-- Some e2e tests perform DB operations and may need increased Jest timeouts. You can call `jest.setTimeout(20000)` in test setup or increase per-test timeouts.
-
-**Key files to inspect**
-
-- [src/database/data-source.ts](src/database/data-source.ts)
-- [test/jest-e2e.json](test/jest-e2e.json)
-- [package.json](package.json)
-
-If you'd like, I can:
-
-- Run the e2e tests and report current failures, or
-- Add a test-only in-memory DB config and re-run tests.
-
-Choose which follow-up you want next.
