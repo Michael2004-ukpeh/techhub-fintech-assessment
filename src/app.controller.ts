@@ -9,7 +9,7 @@ export class AppController {
   @Get()
   getHello(): ApiResponse {
     return {
-      message: 'API is running',
+      message: 'Hello World',
       data: { message: this.appService.getHello() },
     };
   }
