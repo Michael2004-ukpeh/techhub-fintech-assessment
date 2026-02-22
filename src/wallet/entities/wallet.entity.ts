@@ -20,6 +20,9 @@ export class Wallet {
   @Column({ type: 'decimal', default: 0.0, precision: 15, scale: 2 })
   balance: number;
 
+  @Column({ type: 'boolean', default: true })
+  isActive: boolean;
+
   @Column({ type: 'uuid', unique: true })
   userId: string;
 

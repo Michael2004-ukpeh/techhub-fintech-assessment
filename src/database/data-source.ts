@@ -7,6 +7,8 @@ dotenv.config({
   path: path.resolve(process.cwd(), `.env`),
 });
 
+const isProduction = process.env.NODE_ENV === 'production';
+
 export const config: DataSourceOptions = {
   type: 'postgres',
   database: process.env.DB_NAME,
@@ -14,24 +16,15 @@ export const config: DataSourceOptions = {
   port: parseInt(process.env.DB_PORT, 10),
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
-  ssl:
-    process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
-      : false,
-  entities:
-    process.env.NODE_ENV === 'production'
-      ? ['dist/**/*.entity{.js,.ts}']
-      : ['src/**/*.entity{.ts,.js}', 'dist/**/*.entity{.js,.ts}'],
-  migrations:
-    process.env.NODE_ENV === 'production'
-      ? ['dist/migrations/*{.js,.ts}']
-      : ['src/migrations/*{.ts,.js}', 'dist/migrations/*{.js,.ts}'],
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
+  entities: ['dist/src/**/*.entity.js'],
+  migrations: ['dist/migrations/*.js'],
   synchronize: false,
   poolSize: 5,
   extra: {
     max: 5,
-    connectionTimeoutMillis: 5000, // Reduced timeout
-    idleTimeoutMillis: 10000, // Reduced idle timeout
+    connectionTimeoutMillis: 5000,
+    idleTimeoutMillis: 10000,
   },
   cache: {
     duration: 30000,

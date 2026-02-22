@@ -40,12 +40,20 @@ export class WalletService {
     });
 
     if (existingWallet) {
-      throw new ConflictException('User already has a wallet');
+      if (existingWallet.isActive) {
+        throw new ConflictException('User already has an active wallet');
+      } else {
+        // Reactivate deleted wallet
+        existingWallet.isActive = true;
+        existingWallet.balance = 0;
+        return await this.walletRepository.save(existingWallet);
+      }
     }
 
     const wallet = this.walletRepository.create({
       userId,
       balance: 0,
+      isActive: true,
     });
 
     return await this.walletRepository.save(wallet);
@@ -53,7 +61,7 @@ export class WalletService {
 
   async getWalletBalance(walletId: string): Promise<any> {
     const wallet = await this.walletRepository.findOne({
-      where: { id: walletId },
+      where: { id: walletId, isActive: true },
       relations: ['transactions'],
     });
 
@@ -113,6 +121,10 @@ export class WalletService {
         throw new BadRequestException('Wallet not found');
       }
 
+      if (!wallet.isActive) {
+        throw new BadRequestException('Wallet is inactive');
+      }
+
       const newBalance = parseFloat(wallet.balance.toString()) + amount;
       wallet.balance = newBalance.toFixed(2) as any;
 
@@ -132,7 +144,7 @@ export class WalletService {
       await queryRunner.commitTransaction();
 
       return {
-        message: 'Wallet funded successfully',
+        // message: 'Wallet funded successfully',
         walletId,
         amount: amount.toFixed(2),
         newBalance: newBalance.toFixed(2),
@@ -169,6 +181,10 @@ export class WalletService {
         throw new BadRequestException('Wallet not found');
       }
 
+      if (!wallet.isActive) {
+        throw new BadRequestException('Wallet is inactive');
+      }
+
       const currentBalance = parseFloat(wallet.balance.toString());
 
       if (currentBalance < amount) {
@@ -194,7 +210,7 @@ export class WalletService {
       await queryRunner.commitTransaction();
 
       return {
-        message: 'Withdrawal successful',
+        // message: 'Withdrawal successful',
         walletId,
         amount: amount.toFixed(2),
         newBalance: newBalance.toFixed(2),
@@ -225,17 +241,17 @@ export class WalletService {
       );
     }
 
-    await this.walletRepository.remove(wallet);
+    wallet.isActive = false;
+    await this.walletRepository.save(wallet);
 
     return {
-      message: 'Wallet deleted successfully',
       walletId,
     };
   }
 
   async getWalletByUserId(userId: string): Promise<any> {
     const wallet = await this.walletRepository.findOne({
-      where: { userId },
+      where: { userId, isActive: true },
       relations: ['transactions'],
     });
 
@@ -252,7 +268,7 @@ export class WalletService {
     description?: string,
   ): Promise<any> {
     const wallet = await this.walletRepository.findOne({
-      where: { userId },
+      where: { userId, isActive: true },
     });
 
     if (!wallet) {
@@ -268,7 +284,7 @@ export class WalletService {
     description?: string,
   ): Promise<any> {
     const wallet = await this.walletRepository.findOne({
-      where: { userId },
+      where: { userId, isActive: true },
     });
 
     if (!wallet) {
@@ -280,7 +296,7 @@ export class WalletService {
 
   async deleteWalletByUserId(userId: string): Promise<any> {
     const wallet = await this.walletRepository.findOne({
-      where: { userId },
+      where: { userId, isActive: true },
     });
 
     if (!wallet) {

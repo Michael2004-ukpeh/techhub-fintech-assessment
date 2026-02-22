@@ -6,10 +6,9 @@ This repository implements a Wallet & Payment API built with NestJS and TypeORM.
 
 - Node.js >= 16
 - npm
-- PostgreSQL (for development/production). Tests may be configured to run against a test DB or in-memory DB.
-
-**Environment**
-Create a `.env` file in the project root with values appropriate for your environment. Example:
+- PostgreSQL (for development/production).
+  **Environment**
+  Create a `.env` file in the project root with values appropriate for your environment. Example:
 
 ```env
 # Database (development)

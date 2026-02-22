@@ -1,12 +1,12 @@
 import { AppDataSource } from '../data-source';
-import { User } from '../../user/entities/user.entity';
-import { Wallet } from '../../wallet/entities/wallet.entity';
-import { Transaction } from '../../transaction/entities/transaction.entity';
-import { Transfer } from '../../transfer/entities/transfer.entity';
+import { User } from 'src/user/entities/user.entity';
+import { Wallet } from 'src/wallet/entities/wallet.entity';
+import { Transaction } from 'src/transaction/entities/transaction.entity';
+import { Transfer } from 'src/transfer/entities/transfer.entity';
 import {
   TransactionType,
   TransactionStatus,
-} from '../../transaction/enums/transaction.enum';
+} from 'src/transaction/enums/transaction.enum';
 import * as bcrypt from 'bcryptjs';
 import { v4 as uuidv4 } from 'uuid';
 

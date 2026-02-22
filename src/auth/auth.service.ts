@@ -40,7 +40,7 @@ export class AuthService {
     const savedUser = await this.usersRepository.save(user);
 
     return {
-      message: 'User created successfully',
+      // message: 'User created successfully',
       userId: savedUser.id,
       email: savedUser.email,
       fullName: savedUser.fullName,
